@@ -38,7 +38,8 @@ public class LocalPublicIpv4 {
     public String getPublicIp(){
         RestTemplate beanByClass = BeanFactoryUtil
                 .getBeanByClass(RestTemplate.class);
-        return beanByClass.getForObject("http://icanhazip.com/", String.class);
+        String forObject = beanByClass.getForObject("http://icanhazip.com/", String.class);
+        return forObject.trim();
     }
 	
     public static void main(String args[]) {

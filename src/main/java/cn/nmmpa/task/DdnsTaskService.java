@@ -3,9 +3,7 @@ package cn.nmmpa.task;
 import cn.nmmpa.util.UpdateDomainRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,7 +18,9 @@ public class DdnsTaskService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DdnsTaskConfig.class);
 
     public void task(){
+        HeartbeatTask.LAST_TIME = System.currentTimeMillis();
         LOGGER.info("IP扫描开始,时间[{}]..." , getTime());
+        LOGGER.info("记录心跳时间搓:[{}]" , HeartbeatTask.LAST_TIME);
         UpdateDomainRecord record = new UpdateDomainRecord();
         record.analysisDns();
         LOGGER.info("IP扫描完成...");

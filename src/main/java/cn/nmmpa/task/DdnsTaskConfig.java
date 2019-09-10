@@ -1,20 +1,13 @@
 package cn.nmmpa.task;
 
 import cn.nmmpa.pojo.DdnsProperties;
-import cn.nmmpa.util.UpdateDomainRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.Trigger;
-import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
