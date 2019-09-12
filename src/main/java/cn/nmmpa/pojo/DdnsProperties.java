@@ -3,6 +3,10 @@ package cn.nmmpa.pojo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @Author: tan shuai
  * @Date: 2019/9/9 9:35
@@ -17,8 +21,8 @@ public class DdnsProperties {
     private String accessKeySecret;
     @Value("${domainName}")
     private String domainName;
-    @Value("${rR}")
-    private String rR;
+    @Value("${rRs}")
+    private String rRs;
     @Value("${scannTime}")
     private String scannTime;
 
@@ -46,12 +50,12 @@ public class DdnsProperties {
         this.domainName = domainName;
     }
 
-    public String getrR() {
-        return rR;
+    public String getrRs() {
+        return rRs;
     }
 
-    public void setrR(String rR) {
-        this.rR = rR;
+    public void setrRs(String rRs) {
+        this.rRs = rRs;
     }
 
     public String getScannTime() {
@@ -60,5 +64,13 @@ public class DdnsProperties {
 
     public void setScannTime(String scannTime) {
         this.scannTime = scannTime;
+    }
+
+    public List<String> getrRList(){
+        if(this.rRs == null || "".equals(this.rRs)){
+            return new ArrayList<>();
+        }
+        String[] arr = this.rRs.split(",");
+        return Arrays.asList(arr);
     }
 }

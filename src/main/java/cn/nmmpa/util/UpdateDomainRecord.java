@@ -1,6 +1,7 @@
 package cn.nmmpa.util;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import cn.nmmpa.pojo.Aliyun;
 import cn.nmmpa.pojo.DdnsProperties;
@@ -70,27 +71,33 @@ public class UpdateDomainRecord {
 				return;
 			}
 			//更新ip
-			Record record = list.stream()
-					.filter(r -> ddnsProperties.getrR().equals(r.getRR()))
-					.findFirst().orElse(null);
-			if(record == null){
+			List<Record> recordList = list.stream()
+					.filter(r -> ddnsProperties.getrRList().contains(r.getRR()))
+					.collect(Collectors.toList());
+			if(recordList == null || recordList.size() == 0){
 				return;
 			}
 			Aliyun yun = new Aliyun();
 			// 进行判定记录是否需要更新
-			if (record.getValue().equals(ipV4)) {
-				// 不需要更新，继续下次循环
-				LOGGER.info("当前域名解析地址为[{}]不需要更新！" , ipV4);
-			}else {
-				LOGGER.info("域名更换ip[{}]开始" , ipV4);
-				// 进行替换关键数据
-				yun.setIpV4(ipV4);
-				yun.setRecordId(record.getRecordId());
-				yun.setRr(record.getRR());
-				yun.setTTL(record.getTTL());
-				yun.setType(record.getType());
-				demo.analysisDns(yun);
-				LOGGER.info("域名更换ip[{}]成功" , ipV4);
+			for(Record record : recordList){
+				//获取当前解析域名
+				String domain = new StringBuffer(record.getRR())
+						.append(".").append(record.getDomainName())
+						.toString();
+				if (record.getValue().equals(ipV4)) {
+					// 不需要更新，继续下次循环
+					LOGGER.info("当前域名[{}]解析地址为[{}]不需要更新！" , domain ,  ipV4);
+				}else {
+					LOGGER.info("域名[{}]更换ip[{}]开始" , domain , ipV4);
+					// 进行替换关键数据
+					yun.setIpV4(ipV4);
+					yun.setRecordId(record.getRecordId());
+					yun.setRr(record.getRR());
+					yun.setTTL(record.getTTL());
+					yun.setType(record.getType());
+					demo.analysisDns(yun);
+					LOGGER.info("域名[{}]更换ip[{}]成功" , domain , ipV4);
+				}
 			}
 		} catch (Exception e) {
 			LOGGER.error("域名解析失败:{}" , e.toString());
